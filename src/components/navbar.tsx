@@ -31,7 +31,6 @@ export function Navbar() {
     <nav className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm sticky top-0 z-50 border-b">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
           <div className="flex items-center">
             <Link
               href="/home"
@@ -41,7 +40,6 @@ export function Navbar() {
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-6">
             <NavigationMenu className="flex space-x-6">
               <NavigationMenuItem>
@@ -54,10 +52,10 @@ export function Navbar() {
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <NavigationMenuLink
-                  href="/services"
+                  href="/pricing"
                   className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
                 >
-                  Services
+                  Pricing
                 </NavigationMenuLink>
               </NavigationMenuItem>
               <NavigationMenuItem>
