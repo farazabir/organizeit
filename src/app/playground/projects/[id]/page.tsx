@@ -23,7 +23,7 @@ const Project: React.FC = () => {
     setCurrentProject,
     fetchBoards,
     createBoard,
-    moveTask,
+    moveTaskBoard,
     createTask,
   } = useProjectStore();
   const params = useParams();
@@ -37,8 +37,6 @@ const Project: React.FC = () => {
   useEffect(() => {
     fetchProjects();
   }, [fetchProjects]);
-
- 
 
   useEffect(() => {
     if (projects.length) {
@@ -132,7 +130,9 @@ const Project: React.FC = () => {
               id={board.id}
               title={board.name}
               tasks={tasks.filter((t) => t.boardId === board.id)}
-              moveTask={(taskId, newBoardId) => moveTask(taskId.id, newBoardId)}
+              moveTask={(taskId, id, newBoardId) =>
+                moveTaskBoard(taskId.id, newBoardId)
+              }
               createTask={(task) =>
                 createTask(task.boardId, task.title, task.description)
               }

@@ -1,4 +1,3 @@
-// stores/projectStore.ts
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import api from "@/utils/api";
@@ -44,7 +43,7 @@ interface ProjectState {
     title: string,
     description: string
   ) => Promise<void>;
-  moveTask: (taskId: number, newBoardId: number) => Promise<void>;
+  moveTaskBoard: (taskId: number, newBoardId: number) => Promise<void>;
 }
 
 export const useProjectStore = create<ProjectState>()(
@@ -136,12 +135,17 @@ export const useProjectStore = create<ProjectState>()(
           const res = await api.get(`/api/v1/task/${boardId}`, {
             headers: { Authorization: `${token}` },
           });
-          set({ tasks: res.data });
+
+          set((state) => ({
+            tasks: [
+              ...state.tasks.filter((task) => task.boardId !== boardId),
+              ...res.data,
+            ],
+          }));
         } catch (error) {
           console.error("Failed to fetch tasks:", error);
         }
       },
-
       createTask: async (boardId, title, description) => {
         try {
           const token = localStorage.getItem("token");
@@ -158,16 +162,17 @@ export const useProjectStore = create<ProjectState>()(
         }
       },
 
-      moveTask: async (taskId, newBoardId) => {
+      moveTaskBoard: async (taskId, newBoardId) => {
         try {
           const token = localStorage.getItem("token");
           if (!token) throw new Error("No token found");
 
-          // First update the backend
           await api.patch(
-            `/api/v1/task/${taskId}/move`,
-            { newBoardId },
-            { headers: { Authorization: `${token}` } }
+            `/api/v1/task/${taskId}/move/${newBoardId}`,
+            {},
+            {
+              headers: { Authorization: `${token}` },
+            }
           );
 
           set((state) => ({
@@ -186,6 +191,8 @@ export const useProjectStore = create<ProjectState>()(
         projects: state.projects,
         boards: state.boards,
         tasks: state.tasks,
+        currentProject: state.currentProject,
+        currentBoard: state.currentBoard,
       }),
     }
   )
